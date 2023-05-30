@@ -1,29 +1,13 @@
-import { useState, useEffect } from 'react'
 import './App.css'
+import Hashtags from './components/Hashtags.tsx'
+import { Route, Routes } from 'react-router-dom'
 
 function App() {
-  const [people, setPeople] = useState([]);
-
-  useEffect(() => {
-    const fetchPeople = async () => {
-      try {
-        const response = await fetch('/api/people');
-        const data = await response.json();
-        setPeople(data);
-      } catch (error) {
-        console.error('Error fetching data:', error);
-      }
-    };
-    fetchPeople();
-  }, []);
-
   return (
-    <div className="App">
-      <h1>List of People</h1>
-      <ul>
-       
-      </ul>
-    </div>
+    <Routes>
+      <Route path='/' element={<div>Home</div>} />
+      <Route path='/api/hashtags' element={<Hashtags/>} />
+    </Routes>
   );
 }
 

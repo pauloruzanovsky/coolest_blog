@@ -2,21 +2,16 @@ import express from 'express';
 import Hashtag from '../models/Hashtag.js'
 import { db } from '../config/database.js';
 import { ObjectId } from 'mongodb'
+import hashtagControllers from '../controllers/hashtagControllers.js'
 
 const hashtagRouter = express.Router();
 const collection = db.collection('hashtags')
 
 
-// Get all hashtags
-hashtagRouter.get('/', async (req, res) => {
-    const hashtags = await collection.find().toArray();
-    hashtags.forEach((hashtag) => {
-        res.send(`list of hashtags: ${hashtag.name} `)
-    })
-    
-})
+// List of hashtags GET
+hashtagRouter.get('/', hashtagControllers.listHashtags)
 
-// Get one hashtag
+// Details of one hashtag GET
 hashtagRouter.get('/hashtag/:id', async (req, res) => {
     const id = new ObjectId(req.params.id)
     const hashtag = await collection.find({ _id: id } ).toArray()
@@ -51,7 +46,6 @@ hashtagRouter.post('/create', async (req, res) => {
     }
     })
 
-
 // Update a hashtag POST
 hashtagRouter.post('/hashtag/:id/update', async (req, res) => {
     try {
@@ -70,7 +64,7 @@ hashtagRouter.post('/hashtag/:id/update', async (req, res) => {
     }
 })
 
-// Delete a hashtag
+// Delete a hashtag POST
 hashtagRouter.post('/hashtag/:id/delete', (req, res) => {
     try {
         const filter = { _id: new ObjectId(req.params.id) }
