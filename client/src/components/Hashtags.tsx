@@ -7,10 +7,16 @@ export default function Hashtags() {
 
     useEffect(() => {
       const fetchPeople = async () => {
-          const response = await fetch('/api/hashtags');
-          const data = await response.json();
-          setHashtags(data);
-          console.log('response ', response)
+        try {
+            const response = await fetch('/hashtags');
+            const data = await response.json();
+            setHashtags(data);
+            console.log('response ', response)
+        } catch (err) {
+            console.error(err);
+         }
+
+        
       };
       fetchPeople();
     }, []);

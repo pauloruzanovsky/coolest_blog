@@ -21,7 +21,7 @@ githubSetup(app)
 // app.use('/hashtags', hashtagRouter);
 
 // app.get('/', (req, res) => res.send('Server running'));
-app.get('/api/hashtags', (req, res) => {
+app.get('/hashtags', (req, res) => {
     const hashtags = [{ name: 'hashtag1' }, { name: 'hashtag2' }];
     res.json(hashtags);
     // res.send('hi')

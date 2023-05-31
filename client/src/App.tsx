@@ -6,7 +6,7 @@ function App() {
   return (
     <Routes>
       <Route path='/' element={<div>Home</div>} />
-      <Route path='/api/hashtags' element={<Hashtags/>} />
+      <Route path='/hashtags' element={<Hashtags/>} />
     </Routes>
   );
 }
