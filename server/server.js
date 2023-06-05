@@ -13,19 +13,15 @@ const app = express();
 googleSetup(app);
 githubSetup(app)
 
-// view engine setup
-// app.set('views', path.join(path.dirname(new URL(import.meta.url).pathname), 'views'));
-// app.set('view engine', 'ejs');
+app.use(cors())
+app.use(express.json());
 
 // app.use('/auth', authRouter);
-// app.use('/hashtags', hashtagRouter);
+app.use('/hashtags', hashtagRouter);
 
 // app.get('/', (req, res) => res.send('Server running'));
-app.get('/hashtags', (req, res) => {
-    const hashtags = [{ name: 'hashtag1' }, { name: 'hashtag2' }];
-    res.json(hashtags);
-    // res.send('hi')
-  });
+
+
 
 const PORT = process.env.PORT;
 
