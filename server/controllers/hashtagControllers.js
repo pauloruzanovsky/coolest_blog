@@ -41,25 +41,37 @@ export const createHashtag = asyncHandler(async (req, res) => {
 export const updateHashtag = asyncHandler(async (req, res) => {
   try {
       const filter = { _id: new ObjectId(req.params.id) }
-      const mockUpdate = {
+      const hashtagUpdate = {
           $set: {
-              name: 'Another hashtag'.toLowerCase()
+              name: req.body.name.toLowerCase()
           }
       }
   
-      const result = await collection.updateOne(filter, mockUpdate)
+      const result = await collection.updateOne(filter, hashtagUpdate)
       console.log(result)
-      res.send(`Hashtag ${req.params.id} updated`)
+      console.log(`Hashtag ${req.params.id} updated`)
   } catch (error) {
       console.log(error)
   }
 })
 
+export const deleteHashtag = asyncHandler(async (req, res) => {
+    try {
+        const filter = { _id: new ObjectId(req.params.id) }
+        collection.deleteOne(filter)
+        res.send(`Hashtag ${req.params.id} deleted`)
+    } catch (error) {
+        console.log(error)
+    }
+   
+
+})
 
 
 export default {
   listHashtags,
   getHashtag,
   createHashtag,
-  updateHashtag
+  updateHashtag,
+  deleteHashtag
 };

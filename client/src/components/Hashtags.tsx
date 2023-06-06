@@ -46,7 +46,7 @@ export default function Hashtags(props : HashtagsProps) {
             <div>List of hashtags</div>
             <ul>
                 {hashtags.map((hashtag : Hashtag) => (
-                    <Link key={hashtag._id} to={`/hashtags/hashtag/${hashtag._id}`}>
+                    <Link key={hashtag._id} to={`/hashtags/${hashtag._id}`}>
                         <li>{hashtag.name}</li>
                     </Link>))}
             </ul>

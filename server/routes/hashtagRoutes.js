@@ -12,26 +12,16 @@ const collection = db.collection('hashtags')
 hashtagRouter.get('/', hashtagControllers.listHashtags)
 
 // Details of one hashtag GET
-hashtagRouter.get('/hashtag/:id', hashtagControllers.getHashtag)
+hashtagRouter.get('/:id', hashtagControllers.getHashtag)
 
 // Create a hashtag POST
 hashtagRouter.post('/create', hashtagControllers.createHashtag)
 
-// Update a hashtag POST
-hashtagRouter.post('/hashtag/:id/update', hashtagControllers.updateHashtag )
+// Update a hashtag PUT
+hashtagRouter.put('/:id', hashtagControllers.updateHashtag )
 
 // Delete a hashtag POST
-hashtagRouter.post('/hashtag/:id/delete', (req, res) => {
-    try {
-        const filter = { _id: new ObjectId(req.params.id) }
-        collection.deleteOne(filter)
-        res.send(`Hashtag ${req.params.id} deleted`)
-    } catch (error) {
-        console.log(error)
-    }
-   
-
-})
+hashtagRouter.delete('/:id', hashtagControllers.deleteHashtag)
 
 
 export default hashtagRouter

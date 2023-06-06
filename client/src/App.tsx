@@ -10,6 +10,7 @@ function App() {
 
   const handleCreateHashtag = () => {
     setHashtagCreated(hashtagCreated => !hashtagCreated)
+    console.log('hastag created/updated.')
   }
 
   return (
@@ -20,8 +21,8 @@ function App() {
         </div>
         <Routes>
           <Route path='/' element={<div>Home</div>} />
-          <Route path='/hashtags/hashtag/:id' element={<Hashtag/>}/>
-          <Route path='/hashtags/create' element={<HashtagForm hashtagCreated={hashtagCreated} handleCreateHashtag={handleCreateHashtag}/>} />
+          <Route path='/hashtags/:id' element={<Hashtag handleCreateHashtag={handleCreateHashtag}/>}/>
+          <Route path='/hashtags/create' element={<HashtagForm handleCreateHashtag={handleCreateHashtag}/>} />
         </Routes>
     </div>
    

@@ -1,13 +1,14 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
+import { Input } from "./ui/input"
+import { Button } from "./ui/button"
 
 interface HashtagsProps {
-    hashtagCreated: boolean;
     handleCreateHashtag: () => void
 }
 
 export default function HashtagForm(props : HashtagsProps) {
     const [hashtagInput, setHashtagInput] = useState('');
-    const { hashtagCreated, handleCreateHashtag } = props
+    const { handleCreateHashtag } = props
     const createHashtag = async (e: React.FormEvent) => {
         try {
             e.preventDefault();
@@ -24,26 +25,21 @@ export default function HashtagForm(props : HashtagsProps) {
             })
             const data = response.json()
             console.log(data)
+            setHashtagInput('')
+            handleCreateHashtag()
         } catch (err) {
             console.error(err)
         }
 
-        setHashtagInput('')
-        handleCreateHashtag()
     }
-
-    useEffect(() => {
-        console.log('hashtagCreated after submit: ', hashtagCreated)
-
-    },[hashtagCreated])
 
     console.log(hashtagInput)
     return(
         <div>
             <div>Hashtag Form</div>
             <form onSubmit={createHashtag}>
-                <input className='border ' onChange={(e) => setHashtagInput(e.target.value)} type='text' name='name' value={hashtagInput}></input>
-                <button type='submit' className='border'>Submit</button>
+                <Input className='border ' onChange={(e) => setHashtagInput(e.target.value)} type='text' name='name' value={hashtagInput}/>
+                <Button type='submit' className='border'>Submit</Button>
             </form>
         </div>
     )
