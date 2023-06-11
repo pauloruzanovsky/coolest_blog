@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { useParams, Link } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { Button } from "./ui/button"
 import { Input } from "./ui/input"
 import {
@@ -14,76 +14,24 @@ interface Hashtag {
     posts: Array<string>;
 }
 
-interface HashtagsProps {
-    handleCreateHashtag: () => void
-}
-
-export default function Hashtag(props: HashtagsProps) {
+export default function Hashtag(props) {
     const { id } = useParams();
-    const [currentId, setcurrentId] = useState('');
     const [hashtag, setHashtag] = useState({} as Hashtag);
     const [updatedHashtagName, setUpdatedHashtagName] = useState('' as string);
-    const { handleCreateHashtag } = props
+    const { hashtags, updateHashtag, deleteHashtag } = props
 
-    const updateHashtag = () => {
-        console.log('funciona')
-
-        try {
-            console.log('funciona')
-            fetch(`http://localhost:5000/hashtags/${currentId}`, {
-                method: 'PUT',
-                headers: {
-                  'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                  name: updatedHashtagName,
-                }),
-              })
-              .then(response => response.json())
-              .then(data => console.log('data: ', data))
-              handleCreateHashtag()
-
-            } catch (error) {
-          console.error("Error:", error);
-
+    const fetchHashtag = () => {
+      hashtags.forEach(hashtag => {
+        if (hashtag._id === id) {
+          setHashtag(hashtag)
         }
-        console.log('não funciona')
-      };
+      })
+    };
 
-      const deleteHashtag = () => {
-        fetch(`http://localhost:5000/hashtags/${currentId}`, {
-            method: 'DELETE',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-              name: updatedHashtagName,
-            }),
-          })
-          .then(response => response.json())
-          .then(data => console.log('data: ', data))
-          handleCreateHashtag()
-      }
-    
     useEffect(() => {
-      setcurrentId(id);
-      console.log(currentId)
-    },[id])
-  
-    useEffect(() => {
-        const fetchHashtag = async () => {
-          try {
-              const response = await fetch(`http://localhost:5000/hashtags/${currentId}`);
-              const data = await response.json();
-              console.log(data)
-              setHashtag(data);
-          } catch (err) {
-              console.error(err);
-           }
-  
-        };
-        currentId && fetchHashtag();
-      }, [currentId]);
+        fetchHashtag();
+      }, [id]);
+
     return(
         <div>
             <div>{hashtag.name} detail</div>
@@ -110,10 +58,11 @@ export default function Hashtag(props: HashtagsProps) {
                             </div>
                         </div>
                     </div>
-                    <Button onClick={updateHashtag} variant="outline" className="mt-2 bg-slate-300">Update hashtag</Button>
+                      <Button onClick={() => {updateHashtag(id, updatedHashtagName)}} variant="outline" className="mt-2 bg-slate-300">Update hashtag</Button>
                 </PopoverContent>
             </Popover>
-                    <Button onClick={deleteHashtag} variant="outline" className="mt-2 bg-red-300">Delete hashtag</Button>
+              <Button onClick={() => {deleteHashtag(id)}} variant="outline" className="mt-2 bg-red-300">Delete hashtag</Button>
+           
         </div>
     )
 }

@@ -15,43 +15,36 @@ passport.use(
             callbackURL: '/auth/github/callback'
         },
         async (accessToken, refreshToken, profile, done) => {
+            let user = await db.collection('users').findOne({ githubId: profile.node_id })
             try {
-                let user = await db.collection('users').findOne({ githubId: profile.nodeId })
-                
                 if(user) {
                     done(null, user)
                 } else {
-                    console.log(profile)
                     user = new User ({
                         githubId: profile.nodeId,
                         name: profile.displayName,
                         email: profile.emails[0].value,
                         picture: profile.photos[0].value
                     })
-                    db.collection('users').insertOne(user, (err, result) => {
-                        if(err) {
-                            console.log('Failed to add user:', err)
-                            return
-                        }
-                        console.log('User added: ', result.insertedId)
-                    })
+                    db.collection('users').insertOne(user)
                     done(null, user)
-
                 }
             } catch (error) {
                 done(error, false)
             }
-
         }
     )
 )
 
+console.log('githubpassport')
+
 passport.serializeUser((user,done) => {
-    done(null, user)
+    done(null, user.githubId)
 })
 
-passport.deserializeUser((user,done) => {
-    done(null, user)
+passport.deserializeUser(async (id,done) => {
+    const doc = await db.collection('users').findOne({githubId: id})
+    return done(null,doc)
 })
 
 export default function githubSetup(app) {

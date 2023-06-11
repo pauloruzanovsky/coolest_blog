@@ -5,21 +5,25 @@ import googleSetup from './auths/google-setup.js';
 import githubSetup from './auths/github-setup.js';
 import cors from 'cors'
 import dotenv from 'dotenv';
-import path from 'path'
 dotenv.config({ path: './config/config.env' });
 
 const app = express();
+app.use(cors( {
+    origin: 'http://localhost:5173',
+    credentials: true
+}))
+app.use(express.json());
+
 
 googleSetup(app);
 githubSetup(app)
 
-app.use(cors())
-app.use(express.json());
-
-// app.use('/auth', authRouter);
+app.use('/auth', authRouter);
 app.use('/hashtags', hashtagRouter);
 
-// app.get('/', (req, res) => res.send('Server running'));
+app.get('/getuser', (req, res) => {
+    res.send(req.user);
+})
 
 
 

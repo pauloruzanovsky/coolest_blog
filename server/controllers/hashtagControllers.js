@@ -36,6 +36,8 @@ export const createHashtag = asyncHandler(async (req, res) => {
           console.log(error)
       }
   }
+
+  
 })
 
 export const updateHashtag = asyncHandler(async (req, res) => {
@@ -59,7 +61,7 @@ export const deleteHashtag = asyncHandler(async (req, res) => {
     try {
         const filter = { _id: new ObjectId(req.params.id) }
         collection.deleteOne(filter)
-        res.send(`Hashtag ${req.params.id} deleted`)
+        console.log(`Hashtag ${req.params.id} deleted`)
     } catch (error) {
         console.log(error)
     }

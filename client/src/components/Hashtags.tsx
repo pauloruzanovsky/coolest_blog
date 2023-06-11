@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom';
+import { Nav, NavItem } from 'reactstrap'
 
 interface Hashtag {
     _id: string;
@@ -7,49 +8,23 @@ interface Hashtag {
     posts: Array<string>;
 }
 
-interface HashtagsProps {
-    hashtagCreated: boolean;
-    handleCreateHashtag: () => void;
-}
+export default function Hashtags(props) {
+    const { hashtags } = props
 
-export default function Hashtags(props : HashtagsProps) {
-    const { hashtagCreated, handleCreateHashtag } = props
-    const [hashtags, setHashtags] = useState<Hashtag[]>([]);
-    const fetchHashtags = async () => {
-        try {
-            const response = await fetch('http://localhost:5000/hashtags');
-            const data = await response.json();
-            console.log(data)
-            setHashtags(data);
-        } catch (err) {
-            console.error(err);
-         }
-
-      };
-
-
-      useEffect(() => {
-        fetchHashtags();
-      },[])
-
-    useEffect(() => {
-        if(hashtagCreated) {
-            console.log('rerendering hashtags')
-            fetchHashtags();
-            handleCreateHashtag();
-        }
-     
-    }, [hashtagCreated]);
   
     return(
-        <div>
-            <div>List of hashtags</div>
-            <ul>
+        <Nav vertical className='p-2 bg-slate-300'>
+            <div className='flex'>
+                <div>List of hashtags</div>
+                <Link to='/hashtags/create'><button><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-plus"><line x1="12" x2="12" y1="5" y2="19"/><line x1="5" x2="19" y1="12" y2="12"/></svg></button> </Link>
+            </div>
                 {hashtags.map((hashtag : Hashtag) => (
-                    <Link key={hashtag._id} to={`/hashtags/${hashtag._id}`}>
-                        <li>{hashtag.name}</li>
-                    </Link>))}
-            </ul>
-        </div>
+                    <NavItem key={hashtag._id}>
+                        <Link to={`/hashtags/${hashtag._id}`}>
+                            {hashtag.name}
+                        </Link>
+                    </NavItem>))}
+                    
+        </Nav>
     )
 }

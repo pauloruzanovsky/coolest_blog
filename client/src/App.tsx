@@ -1,30 +1,19 @@
-import Hashtags from './components/Hashtags.tsx'
-import Hashtag from './components/Hashtag.tsx'
-import HashtagForm from './components/HashtagForm.tsx'
-import { Route, Routes, Link } from 'react-router-dom'
-import {useState} from 'react'
+import LoginPage from './components/LoginPage.tsx'
+import PrivateRoute from './components/PrivateRoute.tsx'
+import Content from './components/Content.tsx'
+import { Route, Routes, Navigate } from 'react-router-dom'
+import {useContext, useState} from 'react'
+import { myContext } from './components/Context.tsx'
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 function App() {
-  const [hashtagCreated, setHashtagCreated] = useState(false)
-
-
-  const handleCreateHashtag = () => {
-    setHashtagCreated(hashtagCreated => !hashtagCreated)
-    console.log('hastag created/updated.')
-  }
-
+  const userObject = useContext(myContext)
+  
   return (
-    <div className='flex'>
-        <div className='p-4'>
-          <Hashtags hashtagCreated={hashtagCreated} handleCreateHashtag={handleCreateHashtag}/>
-          <Link to='/hashtags/create'>Create Hashtag</Link>
-        </div>
-        <Routes>
-          <Route path='/' element={<div>Home</div>} />
-          <Route path='/hashtags/:id' element={<Hashtag handleCreateHashtag={handleCreateHashtag}/>}/>
-          <Route path='/hashtags/create' element={<HashtagForm handleCreateHashtag={handleCreateHashtag}/>} />
-        </Routes>
-    </div>
+      <Routes>
+        <Route path='/login' element={userObject ? <Navigate to='/' /> : <LoginPage/>}/>
+        <Route path='*' element={<PrivateRoute><Content/></PrivateRoute>} />
+      </Routes>
    
   );
 }

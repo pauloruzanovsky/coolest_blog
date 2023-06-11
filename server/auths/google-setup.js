@@ -15,9 +15,8 @@ passport.use(
             callbackURL: '/auth/google/callback'
         },
         async (accessToken, refreshToken, profile, done) => {
+            let user = await db.collection('users').findOne({ googleId: profile.id })
             try {
-                let user = await db.collection('users').findOne({ googleId: profile.id })
-                
                 if(user) {
                     done(null, user)
                 } else {
@@ -27,30 +26,23 @@ passport.use(
                         email: profile.emails[0].value,
                         picture: profile.photos[0].value
                     })
-                    db.collection('users').insertOne(user, (err, result) => {
-                        if(err) {
-                            console.log('Failed to add user:', err)
-                            return
-                        }
-                        console.log('User added: ', result.insertedId)
-                    })
+                    db.collection('users').insertOne(user)
                     done(null, user)
-
                 }
             } catch (error) {
                 done(error, false)
             }
-
         }
     )
 )
 
 passport.serializeUser((user,done) => {
-    done(null, user)
+    done(null, user.googleId)
 })
 
-passport.deserializeUser((user,done) => {
-    done(null, user)
+passport.deserializeUser(async (id,done) => {
+    const doc = await db.collection('users').findOne({googleId: id})
+    return done(null,doc)
 })
 
 export default function googleSetup(app) {
