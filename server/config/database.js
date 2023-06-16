@@ -5,4 +5,4 @@ import { MongoClient } from 'mongodb';
 const url = process.env.MONGODB_URI;
 const client = new MongoClient(url);
 client.connect();
-export const db = client.db('twitter');
+export const db = client.db('spotify-playlists');

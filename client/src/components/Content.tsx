@@ -1,78 +1,80 @@
 import { useContext, useEffect, useState } from 'react';
 import { myContext } from './Context.tsx'
 import Header from './Header.tsx'
-import Hashtags from './Hashtags.tsx'
+import Playlists from './Playlists.tsx'
+import Playlist from './Playlist.tsx';
+import PlaylistForm from './PlaylistForm.tsx';
 import { Routes, Route, useNavigate } from 'react-router-dom';
 import PrivateRoute from './PrivateRoute.tsx';
-import Hashtag from './Hashtag.tsx';
-import HashtagForm from './HashtagForm.tsx';
-
-
 
 function Content () {
     const userObject = useContext(myContext)
-    const [hashtags, setHashtags] = useState<[]>([]);
+    const [playlists, setPlaylists] = useState<[]>([]);
     const navigate = useNavigate()
-    const [hashtagInput, setHashtagInput] = useState('');
+    const [playlistInput, setPlaylistInput] = useState('');
 
-
-    const fetchHashtags = async () => {
-            const response = await fetch('http://localhost:5000/hashtags');
+    const fetchPlaylists = async () => {
+            const response = await fetch('http://localhost:5000/playlists');
             const data = await response.json();
-            setHashtags(data);
+            setPlaylists(data);
       };
 
     useEffect(() => {
-        fetchHashtags();
+        fetchPlaylists();
+        console.log(playlists)
+
     },[])
 
-    const createHashtag = (e: React.FormEvent, hashtagInput) => {
+
+    const createPlaylist = (e: React.FormEvent, playlistInput) => {
         e.preventDefault();
 
-        const newHashtag = {
-            name: hashtagInput,
+        const newPlaylist = {
+            name: playlistInput,
             posts: []
         }
-        fetch('http://localhost:5000/hashtags/create', {
+        fetch('http://localhost:5000/playlists/create', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify(newHashtag)
+            body: JSON.stringify(newPlaylist)
         })
-        setHashtagInput('')
-        const newHashtags = [...hashtags]
-        if(hashtags.filter(hashtag => hashtag.name === hashtagInput).length === 0) {
-            newHashtags.push(newHashtag)
-            setHashtags(newHashtags)
+        .then(() => fetchPlaylists())
+        setPlaylistInput('')
+        const newPlaylists = [...playlists]
+        if(playlists.filter(playlist => playlist.name === playlistInput).length === 0) {
+            newPlaylists.push(newPlaylist)
+            const newPlaylistSorted = newPlaylists.sort((a, b) => a.name.localeCompare(b.name))
+            setPlaylists(newPlaylistSorted)
         }
     }   
 
-    const updateHashtag = (id, updatedHashtagName) => {
-        if(hashtags.filter(hashtag => hashtag.name === updatedHashtagName).length === 0) {
-            fetch(`http://localhost:5000/hashtags/${id}`, {
+    const updatePlaylistName = (id, updatedPlaylistName) => {
+        if(playlists.filter(playlist => playlist.name === updatedPlaylistName).length === 0) {
+            fetch(`http://localhost:5000/playlists/${id}`, {
                 method: 'PUT',
                 headers: {
                 'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
-                name: updatedHashtagName,
+                name: updatedPlaylistName,
                 }),
             })
 
-            const newHashtags = [...hashtags]
+            const newPlaylists = [...playlists]
             
-                newHashtags.forEach(hashtag => {
-                if (hashtag._id === id) {
-                    hashtag.name = updatedHashtagName
+                newPlaylists.forEach(playlist => {
+                if (playlist._id === id) {
+                    playlist.name = updatedPlaylistName
                 }
                 })
-            setHashtags(newHashtags)
+            setPlaylists(newPlaylists)
           }
     }
 
-    const deleteHashtag = (id) => {
-        fetch(`http://localhost:5000/hashtags/${id}`, {
+    const deletePlaylist = (id) => {
+        fetch(`http://localhost:5000/playlists/${id}`, {
             method: 'DELETE',
             headers: {
               'Content-Type': 'application/json',
@@ -82,20 +84,21 @@ function Content () {
             }),
           })
 
-          const newHashtags = hashtags.filter(hashtag => hashtag._id !== id)
-          setHashtags(newHashtags)
+          const newPlaylists = playlists.filter(playlist => playlist._id !== id)
+          setPlaylists(newPlaylists)
           navigate('/')
     }
+
 
     return (
         <>
         <Header userObject={userObject} />
         <div className='flex'>
-        <Hashtags hashtags={hashtags}/>
+        <Playlists playlists={playlists}/>
         <main className='p-3'>
         <Routes>
-            <Route path='/hashtags/:id' element={<PrivateRoute><Hashtag updateHashtag={updateHashtag} deleteHashtag={deleteHashtag} hashtags={hashtags}/></PrivateRoute>}/>
-            <Route path='/hashtags/create' element={<PrivateRoute><HashtagForm createHashtag={createHashtag}/></PrivateRoute>} />
+            <Route path='/playlists/:id' element={<PrivateRoute><Playlist updatePlaylistName={updatePlaylistName} deletePlaylist={deletePlaylist} playlists={playlists}/></PrivateRoute>}/>
+            <Route path='/playlists/create' element={<PrivateRoute><PlaylistForm createPlaylist={createPlaylist}/></PrivateRoute>} />
         </Routes>
         </main>
         

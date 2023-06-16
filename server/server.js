@@ -1,6 +1,6 @@
 import express from 'express';
 import authRouter  from './routes/authRoutes.js';
-import hashtagRouter from './routes/hashtagRoutes.js';
+import playlistRouter from './routes/playlistRoutes.js';
 import googleSetup from './auths/google-setup.js';
 import githubSetup from './auths/github-setup.js';
 import cors from 'cors'
@@ -19,7 +19,7 @@ googleSetup(app);
 githubSetup(app)
 
 app.use('/auth', authRouter);
-app.use('/hashtags', hashtagRouter);
+app.use('/playlists', playlistRouter);
 
 app.get('/getuser', (req, res) => {
     res.send(req.user);

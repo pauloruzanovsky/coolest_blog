@@ -16,6 +16,7 @@
     "concurrently": "^8.0.1"
   },
   "dependencies": {
+    "@types/react": "^18.2.12",
     "axios": "^1.4.0",
     "cors": "^2.8.5",
     "dotenv": "^16.0.3",
@@ -29,6 +30,8 @@
     "passport": "^0.6.0",
     "passport-github2": "^0.1.12",
     "passport-google-oauth20": "^2.0.0",
-    "socket.io": "^4.6.2"
+    "socket.io": "^4.6.2",
+    "twit": "^2.2.11",
+    "twitter-api-v2": "^1.15.0"
   }
 }

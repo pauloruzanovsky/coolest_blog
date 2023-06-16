@@ -2,7 +2,7 @@ import LoginPage from './components/LoginPage.tsx'
 import PrivateRoute from './components/PrivateRoute.tsx'
 import Content from './components/Content.tsx'
 import { Route, Routes, Navigate } from 'react-router-dom'
-import {useContext, useState} from 'react'
+import { useContext } from 'react'
 import { myContext } from './components/Context.tsx'
 import 'bootstrap/dist/css/bootstrap.min.css';
 
