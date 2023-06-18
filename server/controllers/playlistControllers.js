@@ -72,11 +72,46 @@ export const deletePlaylist = asyncHandler(async (req, res) => {
 
 })
 
+export const addSong = asyncHandler(async (req, res) => {
+   
+  try {
+      const filter = { _id: new ObjectId(req.params.id) }
+      const playlistUpdate = {
+          $push: {
+              songs: req.body.song
+          }
+      }
+  
+      const result = await collection.updateOne(filter, playlistUpdate)
+      console.log(result)
+      console.log(`${req.body.song.name} added to playlist`)
+  } catch (error) {
+      console.log(error)
+  }
+})
 
+export const deleteSong = asyncHandler(async (req, res) => {
+  try {
+      const filter = { _id: new ObjectId(req.params.id) }
+        console.log(req.params.songId)
+      const playlistUpdate = {
+          $pull: {
+              songs: { id: Number(req.params.songId) }
+          }
+      }
+      const result = await collection.updateOne(filter, playlistUpdate)
+      console.log(result)
+      console.log(`Song ${req.params.songId} removed from playlist`)
+    } catch (error) {
+        console.log(error)
+    }
+})
 export default {
   listPlaylists,
   getPlaylist,
   createPlaylist,
   updatePlaylist,
-  deletePlaylist
+  deletePlaylist,
+  addSong,
+  deleteSong
 };

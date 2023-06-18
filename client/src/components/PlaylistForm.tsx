@@ -5,8 +5,8 @@ import { Button } from "./ui/button"
 
 
 export default function PlaylistForm(props) {
-    const [playlistInput, setPlaylistInput] = useState('');
-    const { playlists, createPlaylist  } = props
+    const [, ] = useState('');
+    const { createPlaylist, setPlaylistInput, playlistInput } = props
 
     return(
         <div>

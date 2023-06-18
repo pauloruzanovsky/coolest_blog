@@ -18,5 +18,8 @@ playlistRouter.put('/:id', playlistControllers.updatePlaylist )
 // Delete a playlist POST
 playlistRouter.delete('/:id', playlistControllers.deletePlaylist)
 
+playlistRouter.put('/addSong/:id', playlistControllers.addSong)
+
+playlistRouter.put('/deleteSong/:id/:songId', playlistControllers.deleteSong)
 
 export default playlistRouter

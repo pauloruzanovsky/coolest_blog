@@ -17,12 +17,11 @@ function Content () {
             const response = await fetch('http://localhost:5000/playlists');
             const data = await response.json();
             setPlaylists(data);
+            console.log('playlists updated')
       };
 
     useEffect(() => {
         fetchPlaylists();
-        console.log(playlists)
-
     },[])
 
 
@@ -97,8 +96,8 @@ function Content () {
         <Playlists playlists={playlists}/>
         <main className='p-3'>
         <Routes>
-            <Route path='/playlists/:id' element={<PrivateRoute><Playlist updatePlaylistName={updatePlaylistName} deletePlaylist={deletePlaylist} playlists={playlists}/></PrivateRoute>}/>
-            <Route path='/playlists/create' element={<PrivateRoute><PlaylistForm createPlaylist={createPlaylist}/></PrivateRoute>} />
+            <Route path='/playlists/:id' element={<PrivateRoute><Playlist updatePlaylistName={updatePlaylistName} deletePlaylist={deletePlaylist} fetchPlaylists={fetchPlaylists} playlists={playlists}/></PrivateRoute>}/>
+            <Route path='/playlists/create' element={<PrivateRoute><PlaylistForm playlistInput={playlistInput} setPlaylistInput={setPlaylistInput} createPlaylist={createPlaylist}/></PrivateRoute>} />
         </Routes>
         </main>
         
