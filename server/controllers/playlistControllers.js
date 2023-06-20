@@ -14,9 +14,15 @@ export const listPlaylists = asyncHandler(async (req, res) => {
 });
 
 export const getPlaylist = asyncHandler(async (req, res) => {
-  const playlist = await collection.find({ _id: new ObjectId(req.params.id) } ).toArray()
+    try{
 
-  res.send(playlist[0])
+        const playlist = await collection.find({ _id: new ObjectId(req.params.id) } ).toArray()
+        console.log('playlist updated')
+        res.send(playlist[0])
+    } catch (error) {
+        console.log(error)
+    }
+
 
 });
 

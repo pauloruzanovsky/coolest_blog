@@ -13,38 +13,48 @@ interface Playlist {
 export default function Playlist(props) {
     const { id } = useParams();
     const [playlist, setPlaylist] = useState({} as Playlist);
-    const { playlists, fetchPlaylists, updatePlaylistName, deletePlaylist } = props
+    const { updatePlaylistName, deletePlaylist } = props
 
     const fetchPlaylist = () => {
-      fetch(`http://localhost:5000/playlists/${id}`)
-        .then(res => res.json())
-        .then(data => {
-          setPlaylist(data)
-        })
+      try{
+        fetch(`http://localhost:5000/playlists/${id}`)
+          .then(res => res.json())
+          .then(data => {
+            setPlaylist(data)
+          })
+          console.log('playlist updated')
+          console.log(playlist)
+      } catch (error) {
+        console.log(error)
+      }
     }
-
+    
     useEffect(() => {
         fetchPlaylist();
+        console.log(id)
       }, [id]);
     
     const addSongToPlaylist = (song) => {
-      const songExists = playlist.songs.some(playlistSong => playlistSong.name === song.name)
+      if(playlist) {
 
-      if (!songExists) {
-        fetch(`http://localhost:5000/playlists/addSong/${id}`, {
-          method: 'PUT', 
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            song: song,
-        })})
-        .then(setPlaylist({
-          ...playlist,
-          songs: [...playlist.songs, song]
-        }))
-      } else {
-        console.log('song already in playlist')
+        const songExists = playlist.songs.some(playlistSong => playlistSong.name === song.name)
+  
+        if (!songExists) {
+          fetch(`http://localhost:5000/playlists/addSong/${id}`, {
+            method: 'PUT', 
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              song: song,
+          })})
+          .then(setPlaylist({
+            ...playlist,
+            songs: [...playlist.songs, song]
+          }))
+        } else {
+          console.log('song already in playlist')
+        }
       }
     }
 
@@ -71,7 +81,7 @@ export default function Playlist(props) {
            <PlaylistActionButtons id={id} updatePlaylistName={updatePlaylistName} deletePlaylist={deletePlaylist}/>
            <PlaylistSongs deleteSongFromPlaylist={deleteSongFromPlaylist} playlist={playlist} />
           </div>
-          <AddSongForm addSongToPlaylist={addSongToPlaylist}/>
+          <AddSongForm addSongToPlaylist={addSongToPlaylist} playlist={playlist}/>
         </div>
     )
 }

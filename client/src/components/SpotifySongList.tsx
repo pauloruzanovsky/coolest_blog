@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 
 function SpotifySongList(props) {
     const [songList, setSongList] = useState([] as any);
-    const { songNameInput, addSongToPlaylist } = props
+    const { songNameInput, addSongToPlaylist, playlist } = props
 
     const mockSongList = [
         {
@@ -55,8 +55,13 @@ function SpotifySongList(props) {
 
     },[songNameInput])
 
-    const songListElement = songList.map((song: any) => {
-        return <div className='cursor-pointer' onClick={() => {addSongToPlaylist(song)}} key={song.id}>{song.name}</div>
+    const playlistSongs = playlist.songs ? playlist.songs.map((song: any) => {
+        return song.name
+    }) : []
+
+    const songListElement = songList.filter(song => !playlistSongs.includes(song.name))
+                                    .map((song: any) => {
+                                    return <div className='cursor-pointer' onClick={() => {addSongToPlaylist(song)}} key={song.id}>{song.name}</div>
     })
 
     return (

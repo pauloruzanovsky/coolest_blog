@@ -1,4 +1,3 @@
-import React from 'react';
 
 function PlaylistSongs(props) {
   const { playlist, deleteSongFromPlaylist } = props;
