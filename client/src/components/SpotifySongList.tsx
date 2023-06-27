@@ -1,58 +1,21 @@
 import { useEffect, useState } from 'react';
+import Song from './Song';
 
 function SpotifySongList(props) {
     const [songList, setSongList] = useState([] as any);
-    const { songNameInput, addSongToPlaylist, playlist } = props
-
-    const mockSongList = [
-        {
-            id: 1,
-            name: 'Song 1',
-        },
-        {
-            id: 2,
-            name: 'Song 2',
-        },
-        {
-            id: 3,
-            name: 'Song 3',
-        },
-        {
-            id: 4,
-            name: 'Song 4',
-        },
-        {
-            id: 5,
-            name: 'Song 5',
-        },
-        {
-            id: 6,
-            name: 'Song 6',
-        },
-        {
-            id: 7,
-            name: 'Song 11',
-        }
-    ]
-
+    const { songNameInput, addSongToPlaylist, playlist, disableComponent } = props
 
     useEffect(() => {
-        setSongList(mockSongList)
-    },[])
-
-    useEffect(() => {
-        const filteredSongList = mockSongList.filter(song => song.name.toLowerCase().includes(songNameInput.toLowerCase()))
-
         if(songNameInput.length === 0) {
-            setSongList(mockSongList)
-        }
+            setSongList([])
+        } else {
+            fetch(`http://localhost:5000/spotify/${songNameInput.toLowerCase()}`)
+            .then(res => res.json())
+            .then(data => {
+                setSongList(data)
+            })
 
-        if (songNameInput.length > 0) {
-            setSongList(filteredSongList)
         }
-        
-  
-
     },[songNameInput])
 
     const playlistSongs = playlist.songs ? playlist.songs.map((song: any) => {
@@ -61,8 +24,13 @@ function SpotifySongList(props) {
 
     const songListElement = songList.filter(song => !playlistSongs.includes(song.name))
                                     .map((song: any) => {
-                                    return <div className='cursor-pointer' onClick={() => {addSongToPlaylist(song)}} key={song.id}>{song.name}</div>
-    })
+                                    return (
+                                        <div className={`cursor-pointer flex ${ disableComponent ? 'opacity-50 cursor-not-allowed' : ''}`} onClick={() => {!disableComponent && addSongToPlaylist(song)}} key={song.spotifyId}>
+                                           <Song song={song}/>
+                                        </div>
+                                    )
+                                    })
+                                    
 
     return (
         <div>

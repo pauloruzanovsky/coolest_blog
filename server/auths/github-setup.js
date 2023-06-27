@@ -2,7 +2,7 @@ import passport from 'passport'
 import GitHubStrategy from 'passport-github2'
 import session from 'express-session'
 import dotenv from 'dotenv'
-import User from '../models/User.js'
+import UserModel from '../models/UserModel.js'
 import { db } from '../config/database.js';
 
 dotenv.config({ path: './config/config.env' });
@@ -20,7 +20,7 @@ passport.use(
                 if(user) {
                     done(null, user)
                 } else {
-                    user = new User ({
+                    user = new UserModel ({
                         githubId: profile.nodeId,
                         name: profile.displayName,
                         email: profile.emails[0].value,

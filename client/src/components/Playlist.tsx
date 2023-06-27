@@ -13,32 +13,31 @@ interface Playlist {
 export default function Playlist(props) {
     const { id } = useParams();
     const [playlist, setPlaylist] = useState({} as Playlist);
-    const { updatePlaylistName, deletePlaylist } = props
+    const { updatePlaylistName, deletePlaylist, playlists, fetchPlaylists } = props
+    const [disableComponent, setDisableComponent] = useState(false)
+
 
     const fetchPlaylist = () => {
-      try{
-        fetch(`http://localhost:5000/playlists/${id}`)
-          .then(res => res.json())
-          .then(data => {
-            setPlaylist(data)
-          })
-          console.log('playlist updated')
-          console.log(playlist)
-      } catch (error) {
-        console.log(error)
-      }
+      fetch(`http://localhost:5000/playlists/${id}`)
+        .then(response => response.json())
+        .then(data => {
+          setPlaylist(data)
+        })
     }
-    
+
     useEffect(() => {
         fetchPlaylist();
-        console.log(id)
-      }, [id]);
+        console.log('playlist fetched', playlists)
+      }, [playlists, id]);
+
+    useEffect(() => {
+      console.log(playlist)
+    },[playlist])
     
     const addSongToPlaylist = (song) => {
       if(playlist) {
-
         const songExists = playlist.songs.some(playlistSong => playlistSong.name === song.name)
-  
+        setDisableComponent(true)
         if (!songExists) {
           fetch(`http://localhost:5000/playlists/addSong/${id}`, {
             method: 'PUT', 
@@ -48,10 +47,13 @@ export default function Playlist(props) {
             body: JSON.stringify({
               song: song,
           })})
-          .then(setPlaylist({
-            ...playlist,
-            songs: [...playlist.songs, song]
-          }))
+          .then(() => {
+            console.log('song added to playlist')
+            fetchPlaylists()
+            setTimeout(() => {
+              setDisableComponent(false)
+            }, 1000)
+          })
         } else {
           console.log('song already in playlist')
         }
@@ -59,20 +61,22 @@ export default function Playlist(props) {
     }
 
     const deleteSongFromPlaylist = (songId) => {
+      console.log('playlist id: ', id, 'song id: ', songId)
       fetch(`http://localhost:5000/playlists/deleteSong/${id}/${songId}`, {
         method: 'PUT', 
         headers: {
           'Content-Type': 'application/json',
         },
 
-      }).then(
-        setPlaylist({
-          ...playlist,
-          songs: playlist.songs.filter(song => song.id !== songId)
-        })
-      )
+      }).then(() => {
+        console.log('deleted song')
+        fetchPlaylists()
+      })
+      .catch((error) => {
+        console.log(error)
+      })
+  }
 
-    }
     
     return(
         <div className='flex'>
@@ -81,7 +85,7 @@ export default function Playlist(props) {
            <PlaylistActionButtons id={id} updatePlaylistName={updatePlaylistName} deletePlaylist={deletePlaylist}/>
            <PlaylistSongs deleteSongFromPlaylist={deleteSongFromPlaylist} playlist={playlist} />
           </div>
-          <AddSongForm addSongToPlaylist={addSongToPlaylist} playlist={playlist}/>
+          <AddSongForm addSongToPlaylist={addSongToPlaylist} disableComponent={disableComponent} playlist={playlist}/>
         </div>
     )
 }
