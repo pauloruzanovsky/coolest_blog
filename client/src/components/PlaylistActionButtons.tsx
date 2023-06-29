@@ -6,6 +6,7 @@ import {
     PopoverContent,
     PopoverTrigger,
   } from "./ui/popover"
+import { Edit, Trash2 } from 'lucide-react';
 
 
 function PlaylistActionButtons(props) {
@@ -16,12 +17,12 @@ function PlaylistActionButtons(props) {
         <div>
           <Popover>
               <PopoverTrigger asChild>
-                  <Button variant="outline" className="bg-slate-300">Update playlist name</Button>
+                  <button variant="outline" className=""><Edit /></button>
               </PopoverTrigger>
               <PopoverContent className="w-80">
                   <div className="grid gap-4">
                       <div className="space-y-2">
-                          <h4 className="font-medium leading-none">Update Playlist</h4>
+                          <h4 className="font-medium leading-none">Update Playlist Name</h4>
                           <p className="text-sm text-muted-foreground">
                           Set the new name for the playlist.
                           </p>
@@ -37,10 +38,10 @@ function PlaylistActionButtons(props) {
                           </div>
                       </div>
                   </div>
-                    <Button onClick={() => {updatePlaylistName(id, updatedPlaylistName)}} variant="outline" className="mt-2 bg-slate-300">Update playlist</Button>
+                    <Button onClick={() => {updatePlaylistName(id, updatedPlaylistName)}} variant="outline" className="mt-2 bg-slate-300">Update</Button>
               </PopoverContent>
           </Popover>
-            <Button onClick={() => {deletePlaylist(id)}} variant="outline" className="mt-2 bg-red-300">Delete playlist</Button>
+            <button onClick={() => {deletePlaylist(id)}}><Trash2/></button>
         </div>
     );
 }

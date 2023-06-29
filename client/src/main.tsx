@@ -4,7 +4,7 @@ import App from './App.tsx'
 import './index.css'
 import Context from './components/Context.tsx'
 import { BrowserRouter } from 'react-router-dom'
-
+import "tw-elements-react/dist/css/tw-elements-react.min.css";
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>

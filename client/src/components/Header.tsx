@@ -1,5 +1,4 @@
 import { Link } from 'react-router-dom'
-import { Button } from "./ui/button"
 
 interface userObjectProps {
     _id: string;
@@ -25,10 +24,10 @@ export default function Header({userObject} : {userObject: userObjectProps}) {
        })
     }
     return (
-        <header className='p-4 bg-slate-400 font-bold size-xl flex justify-between'>
-          <Link to='/' className='cursor-pointer'># Spotify Playlists</Link>
-          <div>Hello {userObject && userObject.name}</div>
-          {userObject && <Link to='/login'><Button onClick={logout}>Logout</Button></Link>}
+        <header className='navbar bg-base-100'>
+          <Link to='/' className='btn btn-ghost text-base-content normal-case text-xl'>GrooveBuddy.</Link>
+          <div className='flex items-center'>Hello, {userObject && userObject.name}</div>
+          {userObject && <Link to='/login'><button className='btn btn-secondary' onClick={logout}>Logout</button></Link>}
         </header>
     )
 }

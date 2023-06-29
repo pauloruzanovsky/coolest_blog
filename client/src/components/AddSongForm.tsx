@@ -4,7 +4,8 @@ import SpotifySongList from './SpotifySongList.js';
 
 export default function AddSongForm(props) {
     const [songNameInput, setSongNameInput] = useState('');
-    const { addSongToPlaylist, playlist, disableComponent } = props
+    const { addSongToPlaylist, playlist, disableComponent, audioPlayer, isPlaying, currentSong, handlePreview } = props
+    
 
     return (
         <div>
@@ -13,7 +14,16 @@ export default function AddSongForm(props) {
             <label>Song Name</label>
             <input type="text" className=' border-slate-900 border-1' value={songNameInput} onChange={ (e) => setSongNameInput(e.target.value)}/>
         </form>
-        <SpotifySongList disableComponent={disableComponent} playlist={playlist} songNameInput={songNameInput} addSongToPlaylist={addSongToPlaylist}/>
+        <SpotifySongList 
+            disableComponent={disableComponent} 
+            playlist={playlist} 
+            songNameInput={songNameInput} 
+            addSongToPlaylist={addSongToPlaylist} 
+            audioPlayer={audioPlayer}
+            isPlaying={isPlaying}
+            currentSong={currentSong}
+            handlePreview={handlePreview}
+            />
         </div>
     );
 }

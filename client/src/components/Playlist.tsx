@@ -15,6 +15,61 @@ export default function Playlist(props) {
     const [playlist, setPlaylist] = useState({} as Playlist);
     const { updatePlaylistName, deletePlaylist, playlists, fetchPlaylists } = props
     const [disableComponent, setDisableComponent] = useState(false)
+    const [audioPlayer, setAudioPlayer] = useState(null)
+    const [isPlaying, setIsPlaying] = useState(false)
+    const [currentSong, setCurrentSong] = useState(null)
+
+    useEffect(() => {
+        if(audioPlayer) {
+            if(isPlaying && currentSong) {
+                audioPlayer.pause();
+                audioPlayer.src = currentSong.previewUrl
+                audioPlayer.volume = 0.01
+                audioPlayer.play()
+            } 
+            else {
+                audioPlayer.pause();
+            }
+        }
+    },[isPlaying, currentSong, audioPlayer])
+
+    const handlePreview = (e, song) => {
+      e.stopPropagation()
+      if(isPlaying) {
+          console.log('current song: ', currentSong, 'clicked song: ', song)
+          if(currentSong.spotifyId === song.spotifyId) {
+              setIsPlaying(false)
+              setCurrentSong(null)
+          } else {
+              setCurrentSong(song)
+          }
+      } else {
+          setCurrentSong(song)
+          setIsPlaying(true)
+      }
+  }
+
+  useEffect(() => {
+    const audio = new Audio();
+    setAudioPlayer(audio)
+    return () => {
+        audio.pause()
+        audio.src = ''
+        setAudioPlayer(null)
+        setIsPlaying(false)
+    }
+  },[playlist])
+
+
+  useEffect(() => {
+    fetchPlaylist();
+    console.log('playlist fetched', playlists)
+  }, [playlists, id]);
+
+  useEffect(() => {
+    console.log(playlist)
+  },[playlist])
+
 
 
     const fetchPlaylist = () => {
@@ -25,19 +80,12 @@ export default function Playlist(props) {
         })
     }
 
-    useEffect(() => {
-        fetchPlaylist();
-        console.log('playlist fetched', playlists)
-      }, [playlists, id]);
 
-    useEffect(() => {
-      console.log(playlist)
-    },[playlist])
-    
     const addSongToPlaylist = (song) => {
       if(playlist) {
         const songExists = playlist.songs.some(playlistSong => playlistSong.name === song.name)
         setDisableComponent(true)
+        setIsPlaying(false)
         if (!songExists) {
           fetch(`http://localhost:5000/playlists/addSong/${id}`, {
             method: 'PUT', 
@@ -61,7 +109,7 @@ export default function Playlist(props) {
     }
 
     const deleteSongFromPlaylist = (songId) => {
-      console.log('playlist id: ', id, 'song id: ', songId)
+      setIsPlaying(false)
       fetch(`http://localhost:5000/playlists/deleteSong/${id}/${songId}`, {
         method: 'PUT', 
         headers: {
@@ -76,16 +124,30 @@ export default function Playlist(props) {
         console.log(error)
       })
   }
-
     
     return(
-        <div className='flex'>
-          <div>
+        <div className='grid grid-cols-2'>
+          <div className=''>
+          <div className='flex align-middle'>
           <h1>Playlist: {playlist.name}</h1>
            <PlaylistActionButtons id={id} updatePlaylistName={updatePlaylistName} deletePlaylist={deletePlaylist}/>
-           <PlaylistSongs deleteSongFromPlaylist={deleteSongFromPlaylist} playlist={playlist} />
           </div>
-          <AddSongForm addSongToPlaylist={addSongToPlaylist} disableComponent={disableComponent} playlist={playlist}/>
+           <PlaylistSongs 
+            deleteSongFromPlaylist={deleteSongFromPlaylist} 
+            playlist={playlist}
+            audioPlayer={audioPlayer}
+            isPlaying={isPlaying}
+            currentSong={currentSong}
+            handlePreview={handlePreview}/>
+          </div>
+          <AddSongForm 
+            addSongToPlaylist={addSongToPlaylist} 
+            disableComponent={disableComponent} 
+            playlist={playlist} 
+            audioPlayer={audioPlayer}
+            isPlaying={isPlaying}
+            currentSong={currentSong}
+            handlePreview={handlePreview}/>
         </div>
     )
 }

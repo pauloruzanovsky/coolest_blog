@@ -31,11 +31,11 @@ export const getPlaylist = asyncHandler(async (req, res) => {
 export const createPlaylist = asyncHandler(async (req, res) => {
   const playlist = new PlaylistModel(
       {
-          name: req.body.name.toLowerCase(),
+          name: req.body.name,
           songs: []
       }
   )
-  const checkIfExist = await collection.findOne({name: playlist.name.toLowerCase()})
+  const checkIfExist = await collection.findOne({name: playlist.name})
   if (checkIfExist) {
       res.send('Playlist already exists')
   } else {
@@ -56,7 +56,7 @@ export const updatePlaylist = asyncHandler(async (req, res) => {
       const filter = { _id: new ObjectId(req.params.id) }
       const playlistUpdate = {
           $set: {
-              name: req.body.name.toLowerCase()
+              name: req.body.name
           }
       }
   
@@ -120,18 +120,25 @@ export const filterSongs = asyncHandler(async (req, res) => {
     spotifyApi.clientCredentialsGrant()
     .then((data) => {
     spotifyApi.setAccessToken(data.body['access_token']);
-    const songName = req.params.input
+    console.log('req: ', req.query)
+    const songName = req.query.songName
+    const existingSongs = JSON.parse(req.query.existingSongs).map(song => song.spotifyId)
+    console.log('existingSongs: ', existingSongs)
+
     spotifyApi.searchTracks(songName, {limit: 10}).then((data) => {
-    const songsArray = data.body.tracks.items.map(song => (
-        {
-            spotifyId:song.id, 
-            name:song.name, 
-            artist:song.artists[0].name,
-            imageUrl:song.album.images[0].url,
-            previewUrl: song.preview_url
-        }))
-    res.send(songsArray)
-    })
+        const songsArray = data.body.tracks.items.map(song => (
+            {
+                spotifyId:song.id, 
+                name:song.name, 
+                artist:song.artists[0].name,
+                imageUrl:song.album.images[0].url,
+                previewUrl: song.preview_url
+            }))
+        res.send(songsArray)
+        })
+
+    
+
 }).catch((err) => {
     console.log(err);
 })
