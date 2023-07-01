@@ -1,5 +1,3 @@
-import { Button } from "./ui/button";
-import { Input } from "./ui/input";
 
 function NewPlaylistModal(props) {
     const { createPlaylist, setPlaylistInput, playlistInput } = props
