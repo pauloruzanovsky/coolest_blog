@@ -7,6 +7,7 @@ import {
     PopoverTrigger,
   } from "./ui/popover"
 import { Edit, Trash2 } from 'lucide-react';
+import UpdatePlaylistModal from './UpdatePlaylistModal'
 
 
 function PlaylistActionButtons(props) {
@@ -15,34 +16,10 @@ function PlaylistActionButtons(props) {
 
     return (
         <div>
-          <Popover>
-              <PopoverTrigger asChild>
-                  <button variant="outline" className=""><Edit /></button>
-              </PopoverTrigger>
-              <PopoverContent className="w-80">
-                  <div className="grid gap-4">
-                      <div className="space-y-2">
-                          <h4 className="font-medium leading-none">Update Playlist Name</h4>
-                          <p className="text-sm text-muted-foreground">
-                          Set the new name for the playlist.
-                          </p>
-                      </div>
-                      <div className="grid gap-2">
-                          <div className="grid grid-cols-3 items-center gap-4">
-                              <Input
-                              id="name"
-                              onChange={(e) => setUpdatedPlaylistName(e.target.value)}
-                              value={updatedPlaylistName}
-                              className="col-span-2 h-8"
-                              />
-                          </div>
-                      </div>
-                  </div>
-                    <Button onClick={() => {updatePlaylistName(id, updatedPlaylistName)}} variant="outline" className="mt-2 bg-slate-300">Update</Button>
-              </PopoverContent>
-          </Popover>
-            <button onClick={() => {deletePlaylist(id)}}><Trash2/></button>
-        </div>
+            <button onClick={()=>window.my_modal_2.showModal()}> <Edit size={18}/></button>
+            <UpdatePlaylistModal id={id} updatedPlaylistName={updatedPlaylistName} updatePlaylistName={updatePlaylistName} setUpdatedPlaylistName={setUpdatedPlaylistName}/>
+         <button onClick={() => {deletePlaylist(id)}}><Trash2 size={18}/></button>
+         </div>
     );
 }
 

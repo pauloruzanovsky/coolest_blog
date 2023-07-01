@@ -32,7 +32,7 @@ export default function Header({userObject, playlistInput, setPlaylistInput, cre
           </div>
           <div className='flex gap-3'>
             <div className='flex items-center'>Hello, {userObject && userObject.name}</div>
-            {userObject && <Link to='/login'><button className='btn btn-secondary btn-sm' onClick={logout}>Logout</button></Link>}
+            {userObject && <Link to='/login'><button className='btn btn-ghost' onClick={logout}>Logout</button></Link>}
           </div>
         </header>
     )

@@ -126,9 +126,9 @@ export default function Playlist(props) {
   }
     
     return(
-        <div className='grid grid-cols-2 bg-base-300 p-4 rounded text-base-content'>
-          <div className=''>
-            <div className='flex items-center mb-3 pb-2'>
+        <div className='grid grid-cols-2 gap-4 text-base-content'>
+          <div className='bg-base-300 rounded p-4 '>
+            <div className='flex items-center justify-between mb-3 pb-2'>
               <h2 className='font-bold text-5xl '>{playlist.name}</h2>
               <PlaylistActionButtons id={id} updatePlaylistName={updatePlaylistName} deletePlaylist={deletePlaylist}/>
             </div>

@@ -8,11 +8,10 @@ export default function AddSongForm(props) {
     
 
     return (
-        <div>
+        <div className='bg-base-300 rounded p-4'>
         <form>
-            <div>Add a new song to your playlist</div>
-            <label>Song Name</label>
-            <input type="text" className=' border-slate-900 border-1' value={songNameInput} onChange={ (e) => setSongNameInput(e.target.value)}/>
+            <div className='font-bold text-2xl mb-2'>Add new songs to your playlist</div>
+            <input placeholder='Find a new song...' type="text" className='input border-slate-900 border-1 mb-2' value={songNameInput} onChange={ (e) => setSongNameInput(e.target.value)}/>
         </form>
         <SpotifySongList 
             disableComponent={disableComponent} 

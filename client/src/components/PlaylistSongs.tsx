@@ -17,9 +17,9 @@ function PlaylistSongs(props) {
         }
         return 0;})
       .map((song) => (
-      <li className='flex justify-between align-middle' key={song.spotifyId}>
+      <li className='flex cursor-default justify-between align-middle hover:outline hover: outline-1 rounded p-1' key={song.spotifyId}>
         <Song song={song} onPreview={handlePreview} isPlaying={isPlaying} currentSong={currentSong}/>
-        <button onClick={() => {deleteSongFromPlaylist(song.spotifyId)}}><Trash2 /></button>
+        <button className='hover:brightness-200' onClick={() => {deleteSongFromPlaylist(song.spotifyId)}}><Trash2 size={18}/></button>
       </li>))
   }
 

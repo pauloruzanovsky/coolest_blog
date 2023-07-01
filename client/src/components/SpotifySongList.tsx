@@ -29,7 +29,7 @@ function SpotifySongList(props) {
     const songListElement = searchingSongs ? <div>Searching...</div> : songList.filter(song => !playlistSongs.includes(song.name))
                                     .map((song: any) => {
                                     return (
-                                        <div className={`cursor-pointer flex ${ disableComponent ? 'opacity-50 cursor-not-allowed' : ''}`} onClick={() => {!disableComponent && addSongToPlaylist(song)}} key={song.spotifyId}>
+                                        <div className={`cursor-pointer flex ${ disableComponent ? 'opacity-50 cursor-not-allowed' : ''} flex cursor-default justify-between align-middle hover:text-white hover:outline hover: outline-1 outline-base-content rounded p-1`} onClick={() => {!disableComponent && addSongToPlaylist(song)}} key={song.spotifyId}>
                                            <Song song={song} onPreview={handlePreview} isPlaying={isPlaying} currentSong={currentSong}/>
                                         </div> 
                                     )
@@ -38,7 +38,7 @@ function SpotifySongList(props) {
 
     return (
         <div className='flex flex-col gap-2'>
-            {songNameInput ? songListElement : <div>Search for songs</div>}
+            {songListElement}
         </div>
     );
 }
