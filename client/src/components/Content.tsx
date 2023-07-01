@@ -3,9 +3,9 @@ import { myContext } from './Context.tsx'
 import Header from './Header.tsx'
 import Playlists from './Playlists.tsx'
 import Playlist from './Playlist.tsx';
-import PlaylistForm from './PlaylistForm.tsx';
 import { Routes, Route, useNavigate } from 'react-router-dom';
 import PrivateRoute from './PrivateRoute.tsx';
+import NewPlaylistModal from './NewPlaylistModal.tsx';
 
 function Content () {
     const userObject = useContext(myContext)
@@ -28,19 +28,25 @@ function Content () {
 
     const createPlaylist = (e: React.FormEvent, playlistInput) => {
         e.preventDefault();
-
-        const newPlaylist =  {
-            name: playlistInput,
-            songs: []
+        if(playlistInput) {
+            const newPlaylist =  {
+                name: playlistInput,
+                songs: []
+            }
+    
+            fetch('http://localhost:5000/playlists/create', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(newPlaylist)
+            }).then(() => 
+            {
+                fetchPlaylists()
+                setPlaylistInput('')
+                document.querySelector('summary')?.click()
+            })
         }
-
-        fetch('http://localhost:5000/playlists/create', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(newPlaylist)
-        }).then(() => fetchPlaylists())
     }   
 
     const updatePlaylistName = (id, updatedPlaylistName) => {
@@ -86,20 +92,20 @@ function Content () {
 
     return (
         <>
-        <Header userObject={userObject} />
-        <div className='flex'>
-        <Playlists playlists={playlists}/>
-        <main className='p-3'>
+        <Header userObject={userObject}
+                playlistInput={playlistInput} 
+                setPlaylistInput={setPlaylistInput} 
+                createPlaylist={createPlaylist}
+        />
+        <main className='p-3 bg-base-100'>
         <Routes>
+            <Route path='/' element={<PrivateRoute><Playlists playlists={playlists}/></PrivateRoute>}/>
             <Route path='/playlists/:id' element={<PrivateRoute><Playlist updatePlaylistName={updatePlaylistName} 
                                                                             deletePlaylist={deletePlaylist} 
                                                                             fetchPlaylists={fetchPlaylists} 
                                                                             playlists={playlists}/></PrivateRoute>}/>
-            <Route path='/playlists/create' element={<PrivateRoute><PlaylistForm playlistInput={playlistInput} setPlaylistInput={setPlaylistInput} createPlaylist={createPlaylist}/></PrivateRoute>} />
         </Routes>
         </main>
-        
-        </div>
         </>
     );
 }

@@ -126,12 +126,12 @@ export default function Playlist(props) {
   }
     
     return(
-        <div className='grid grid-cols-2'>
+        <div className='grid grid-cols-2 bg-base-300 p-4 rounded text-base-content'>
           <div className=''>
-          <div className='flex align-middle'>
-          <h1>Playlist: {playlist.name}</h1>
-           <PlaylistActionButtons id={id} updatePlaylistName={updatePlaylistName} deletePlaylist={deletePlaylist}/>
-          </div>
+            <div className='flex items-center mb-3 pb-2'>
+              <h2 className='font-bold text-5xl '>{playlist.name}</h2>
+              <PlaylistActionButtons id={id} updatePlaylistName={updatePlaylistName} deletePlaylist={deletePlaylist}/>
+            </div>
            <PlaylistSongs 
             deleteSongFromPlaylist={deleteSongFromPlaylist} 
             playlist={playlist}

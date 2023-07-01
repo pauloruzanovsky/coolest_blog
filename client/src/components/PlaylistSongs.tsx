@@ -25,14 +25,9 @@ function PlaylistSongs(props) {
 
     return (
         <div>
-        <div>
-          Current songs in the playlist:
-        </div>
-        <div>
           <ul className='flex flex-col gap-2'>
             {playlistElement}
           </ul>
-        </div>
       </div>
     );
 }

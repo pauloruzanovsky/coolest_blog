@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom'
+import NewPlaylistModal from './NewPlaylistModal';
 
 interface userObjectProps {
     _id: string;
@@ -9,7 +10,7 @@ interface userObjectProps {
     picture: string;
 
 }
-export default function Header({userObject} : {userObject: userObjectProps}) {
+export default function Header({userObject, playlistInput, setPlaylistInput, createPlaylist} : {userObject: userObjectProps, playlistInput: string, setPlaylistInput: () => void, createPlaylist: () => void }) {
     const logout = () => {
        fetch("http://localhost:5000/auth/logout", {
         method: "GET",
@@ -24,10 +25,15 @@ export default function Header({userObject} : {userObject: userObjectProps}) {
        })
     }
     return (
-        <header className='navbar bg-base-100'>
-          <Link to='/' className='btn btn-ghost text-base-content normal-case text-xl'>GrooveBuddy.</Link>
-          <div className='flex items-center'>Hello, {userObject && userObject.name}</div>
-          {userObject && <Link to='/login'><button className='btn btn-secondary' onClick={logout}>Logout</button></Link>}
+        <header className='flex justify-between items-center bg-base-300 text-base-content'>
+          <div className='flex'>
+            <Link to='/' className='btn btn-ghost text-base-content normal-case text-xl'>GrooveBuddy.</Link>
+            <NewPlaylistModal playlistInput={playlistInput} setPlaylistInput={setPlaylistInput} createPlaylist={createPlaylist}/>
+          </div>
+          <div className='flex gap-3'>
+            <div className='flex items-center'>Hello, {userObject && userObject.name}</div>
+            {userObject && <Link to='/login'><button className='btn btn-secondary btn-sm' onClick={logout}>Logout</button></Link>}
+          </div>
         </header>
     )
 }
